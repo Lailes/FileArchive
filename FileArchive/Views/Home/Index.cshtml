@@ -1,0 +1,21 @@
+@{ Layout = null; }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" asp-href-include="lib/bootstrap/dist/css/*.min.css"/>
+    <link rel="stylesheet" asp-href-include="styles/shared.css">
+    <title>File Archive</title>
+</head>
+<body>
+<ul class="shadow">
+    <li><text>File Archive</text></li>
+</ul>
+<div class="centered shadow welcome-div">
+    <div style="margin: 20px">Welcome to File Archive!</div>
+    <a class="btn btn-light" asp-controller="Auth" asp-action="LogIn" >Log In</a>
+    <a class="btn btn-dark go-right" asp-controller="Auth" asp-action="SighUp" >Sigh Up</a>
+</div>
+</body>
+</html>

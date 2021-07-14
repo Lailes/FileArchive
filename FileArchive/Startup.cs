@@ -1,5 +1,6 @@
 using System;
 using FileArchive.Models;
+using FileArchive.Models.Dummies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -29,6 +30,8 @@ namespace FileArchive
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IFileProvider, FakeAppContext>();
             
             services.AddMemoryCache();
             services.AddSession();
@@ -48,6 +51,7 @@ namespace FileArchive
             app.UseAuthorization();
             
             app.UseStaticFiles();
+            app.UseSession();
 
             
             app.UseMvc(options =>

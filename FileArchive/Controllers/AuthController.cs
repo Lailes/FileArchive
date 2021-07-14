@@ -44,7 +44,7 @@ namespace FileArchive.Controllers
 
             if (result)
             {
-                
+                return Redirect("/Panel/Files");
             }
             
             ModelState.AddModelError("", "Wrong login or password");

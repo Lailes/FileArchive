@@ -1,14 +1,10 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FileArchive
+namespace FileArchive.Controllers
 {
     public class HomeController : Controller
     {
-        // GET
-        public IActionResult Index()
-        {
-            return View("Index");
-        }
+        [HttpGet]
+        public IActionResult Index() => View();
     }
 }

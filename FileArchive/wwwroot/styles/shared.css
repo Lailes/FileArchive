@@ -3,7 +3,7 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #3a2c5a;
 }
 
 li {
@@ -40,7 +40,7 @@ li text {
     transform: translate(-50%, -50%);
 }
 
-.login-div{
+.view-div{
     border-radius: 32px;
     background: linear-gradient(145deg, #3a3a3a, #444444);
     box-shadow:  15px 15px 30px #232323,
@@ -59,4 +59,11 @@ li text {
 
 .go-right{
     float: right;
+}
+
+.file-list-item {
+    padding:10px;
+    background: #f1f8ff;
+    border-radius:5px;
+    margin:5px;
 }

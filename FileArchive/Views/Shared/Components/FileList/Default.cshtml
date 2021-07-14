@@ -1,0 +1,38 @@
+@model IEnumerable<FileDetails>
+
+@if (Model != null)
+{
+    <div class="shadow centered" style="border-radius: 5px;padding: 20px;background: #e8eeff;">
+        @if (Model.Any())
+        {
+            @foreach (var detail in Model)
+            {
+                <div class="file-list-item shadow">
+                    <div style="margin-right: 30px; display: inline-block;">
+                        <div>@detail.FileName</div>
+                        <div class="form-text">@detail.BytesCount</div>
+                        <div class="form-text">@detail.UploadDateTime</div>
+                    </div>
+                    <div style="display: inline-block; float: right">
+                        <div style="margin-bottom: 5px;">
+                            <a class="btn btn-secondary">Download</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-danger" style="width: 100%;">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            }   
+        }
+        else
+        {
+            <div class="centered shadow" style="margin: 30px; border-radius: 10px; padding: 30px">
+                No files
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="shadow centered">No files</div>
+}

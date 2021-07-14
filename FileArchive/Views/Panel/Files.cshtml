@@ -1,0 +1,31 @@
+@model string
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+     <meta name="viewport" content="width=device-width">
+     <link rel="stylesheet" asp-href-include="lib/bootstrap/dist/css/*.min.css"/>
+     <link rel="stylesheet" asp-href-include="styles/shared.css">
+    <title>Log In</title>
+</head>
+<body>
+<ul class="shadow">
+    <li><text>Files for @(Model ?? "Unknown")</text></li>
+</ul>
+@if (!string.IsNullOrEmpty(Model))
+{
+    @await Component.InvokeAsync("FileList")   
+}
+else
+{
+    <div class="centered shadow" style="margin: 30px; border-radius: 10px; padding: 30px">
+        No files!
+    </div>
+}
+</body>
+</html>

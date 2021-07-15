@@ -62,8 +62,37 @@ li text {
 }
 
 .file-list-item {
-    padding:10px;
+    padding: 10px 10px 15px;
     background: #f1f8ff;
     border-radius:5px;
     margin:5px;
+}
+
+.pagination-div {
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 5px 5px;
+    background: #f1f8ff;
+}
+
+.pagination-btn {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.pagination-btn-start {
+    margin-right: 10px;
+}
+
+.pagination-btn-end {
+    margin-left: 10px;
+}
+
+.btn-download {
+    background: #ffffff;
+    border-color: #5d5d5d;
+}
+
+.btn-delete {
+    background: #ffffff;
+    border-color: #ad0000;
 }

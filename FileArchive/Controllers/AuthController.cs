@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using FileArchive.Models;
 using Microsoft.AspNetCore.Identity;
@@ -49,6 +50,12 @@ namespace FileArchive.Controllers
             
             ModelState.AddModelError("", "Wrong login or password");
             return View(data);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SighUp(AuthData authData)
+        {
+            throw new NotImplementedException();
         }
         
     }

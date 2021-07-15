@@ -1,0 +1,19 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" asp-href-include="lib/bootstrap/dist/css/*.min.css"/>
+    <link rel="stylesheet" asp-href-include="styles/shared.css">
+    <title>File Archive</title>
+    <title>File Archive</title>
+</head>
+<body>
+@await Component.InvokeAsync("NavigationMenu")
+@RenderBody()
+</body>
+</html>

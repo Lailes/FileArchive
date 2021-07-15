@@ -1,24 +1,9 @@
 @model PaginationInfo
 
-@addTagHelper FileArchive.Infrastructure.*, FileArchive
-
 @{
-    Layout = null;
+    Layout = "_Layout";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-     <meta name="viewport" content="width=device-width">
-     <link rel="stylesheet" asp-href-include="lib/bootstrap/dist/css/*.min.css"/>
-     <link rel="stylesheet" asp-href-include="styles/shared.css">
-    <title>Log In</title>
-</head>
-<body>
-<ul class="shadow">
-    <li><text>Files list</text></li>
-</ul>
 @if (Model != null)
 {
     <div class="shadow centered" style="border-radius: 5px;padding: 20px;background: #e8eeff; width: 50%">
@@ -66,6 +51,3 @@ else
 {
     <div class="shadow centered">No files</div>
 }
-
-</body>
-</html>

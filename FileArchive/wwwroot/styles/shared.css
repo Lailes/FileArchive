@@ -96,3 +96,10 @@ li text {
     background: #ffffff;
     border-color: #ad0000;
 }
+
+.profile-info-div {
+    background: #eff4ff;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+}

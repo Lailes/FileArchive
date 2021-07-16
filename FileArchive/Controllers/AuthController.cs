@@ -45,7 +45,7 @@ namespace FileArchive.Controllers
 
             if (result)
             {
-                return Redirect("/Panel/Files");
+                return Redirect("/Profile");
             }
             
             ModelState.AddModelError("", "Wrong login or password");
@@ -56,6 +56,12 @@ namespace FileArchive.Controllers
         public async Task<IActionResult> SighUp(AuthData authData)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IActionResult> SighOut()
+        {
+            await _signInManager.SignOutAsync();
+            return Redirect("/Home/Index");
         }
         
     }

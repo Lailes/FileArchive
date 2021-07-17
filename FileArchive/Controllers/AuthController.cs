@@ -55,7 +55,22 @@ namespace FileArchive.Controllers
         [HttpPost]
         public async Task<IActionResult> SighUp(AuthData authData)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByNameAsync(authData.LogIn);
+            if (user != null)
+            {
+                ModelState.AddModelError("", "User with this name is already exists");
+                return View(authData);
+            }
+
+            var result = await _userManager.CreateAsync(new IdentityUser(authData.LogIn), authData.Password);
+            
+            if (result.Succeeded)
+                return Redirect("/Profile");
+            
+            foreach (var identityError in result.Errors)
+                ModelState.AddModelError("", identityError.Description);
+            
+            return View(authData);
         }
 
         public async Task<IActionResult> SighOut()
@@ -63,6 +78,5 @@ namespace FileArchive.Controllers
             await _signInManager.SignOutAsync();
             return Redirect("/Home/Index");
         }
-        
     }
 }

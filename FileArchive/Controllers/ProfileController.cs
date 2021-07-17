@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileArchive.Controllers
-{
-    
+{    
     [Authorize]
     public class ProfileController : Controller
     {
@@ -19,6 +18,7 @@ namespace FileArchive.Controllers
             if (User is not {Identity: { }}) return View("ViewProfile", null);
             
             var userDetails = _fileProvider.FileDetails.Where(detail => detail.Owner == User.Identity.Name).ToList();
+            
             return View("ViewProfile", new ProfileInfo {
                 UserName = User.Identity.Name,
                 BytesCount = userDetails.Sum(detail => (long) detail.BytesCount),

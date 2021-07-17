@@ -9,35 +9,35 @@
     <div class="shadow centered" style="border-radius: 5px;padding: 20px;background: #e8eeff; width: 50%">
         <div>
             @if (Model.FileDetailsEnumerable.Any())
+            {
+                @foreach (var detail in Model.FileDetailsEnumerable)
                 {
-                    @foreach (var detail in Model.FileDetailsEnumerable)
-                    {
-                        <div class="file-list-item shadow">
-                            <div style="margin-right: 30px; display: inline-block; vertical-align: middle">
-                                <div>@detail.FileName</div>
-                                <div class="form-text">@detail.BytesCount</div>
-                                <div class="form-text">@detail.UploadDateTime</div>
+                    <div class="file-list-item shadow">
+                        <div style="margin-right: 30px; display: inline-block; vertical-align: middle">
+                            <div>@detail.FileName</div>
+                            <div class="form-text">@detail.BytesCount</div>
+                            <div class="form-text">@detail.UploadDateTime</div>
+                        </div>
+                        <div style="display: inline-block; float: right">
+                            <div style="margin-bottom: 5px;">
+                                <a class="btn btn-download shadow">Download</a>
                             </div>
-                            <div style="display: inline-block; float: right">
-                                <div style="margin-bottom: 5px;">
-                                    <a class="btn btn-download shadow">Download</a>
-                                </div>
-                                <div style="margin-bottom: 5px;">
-                                    <a class="btn btn-delete shadow" style="width: 100%;">Delete</a>
-                                </div>
+                            <div style="margin-bottom: 5px;">
+                                <a class="btn btn-delete shadow" style="width: 100%;">Delete</a>
                             </div>
                         </div>
-                    }
-                }
-                else
-                {
-                    <div class="centered shadow" style="margin: 30px; border-radius: 10px; padding: 30px">
-                        No files
                     </div>
                 }
+            }
+            else
+            {
+                <div class="centered shadow" style="margin: 30px; border-radius: 10px; padding: 30px">
+                    No files
+                </div>
+            }
         </div>
         <div class="shadow pagination-div"
-             page-model="@Model" 
+             page-model="@Model"        
              selected-button-class="btn btn-secondary pagination-btn shadow" 
              unselected-button-class="btn btn-light pagination-btn shadow"
              controller="Panel"
@@ -45,7 +45,10 @@
              button-end-class="btn btn-primary pagination-btn shadow"
              div-class="shadow pagination-div view-div"
              action="Files"></div>
-</div>
+        <div class="shadow pagination-div" style="text-align:center;">
+            <a class="btn btn-primary shadow" style="background-color: #3a2c5a;">Upload File</a>
+        </div>
+    </div>
 }
 else
 {

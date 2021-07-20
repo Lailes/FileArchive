@@ -1,5 +1,5 @@
-using System;
 using FileArchive.Models;
+using FileArchive.Models.Account;
 using FileArchive.Models.Dummies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +27,7 @@ namespace FileArchive
             services.AddMvc(options => options.EnableEndpointRouting = false);
             
             services.AddDbContext<IdentityContext>(opt => opt.UseSqlServer(_configuration[IdentityConfig]));
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<FileArchiveUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
@@ -52,7 +52,6 @@ namespace FileArchive
             
             app.UseStaticFiles();
             app.UseSession();
-
             
             app.UseMvc(options =>
             {

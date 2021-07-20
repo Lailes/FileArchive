@@ -1,10 +1,12 @@
+@model string
+
 @{
     Layout = null;
 }
 
 <ul class="shadow">
     <li><text style="margin-right: 20px;">File Archive</text></li>
-    @if (User is {Identity: {IsAuthenticated: true }})
+    @if (Model != null)
     {
         <div>
             <li><a asp-controller="Panel" asp-action="Files" style="vertical-align: middle" >Files</a></li>

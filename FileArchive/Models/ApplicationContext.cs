@@ -10,7 +10,7 @@ namespace FileArchive.Models
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) {
         }
 
-        public DbSet<FileStoreRecord> FileStoreRecords { get; set; }
+        public  DbSet<FileStoreRecord> FileStoreRecords { get; set; }
 
         public IEnumerable<FileDetail> FileDetails => 
             FileStoreRecords
@@ -18,8 +18,12 @@ namespace FileArchive.Models
                     FileName = Path.GetFileName(record.Name), 
                     UploadDateTime = File.GetCreationTime(record.Path), 
                     BytesCount = (ulong) new FileInfo(record.Path).Length,
-                    Owner = record.OwnerName
+                    OwnerEmail = record.OwnerEmail
                 }).AsEnumerable();
 
+        public IEnumerable<FileDetail> GetFileDetailsForName(string? name)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

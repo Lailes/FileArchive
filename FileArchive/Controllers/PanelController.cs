@@ -17,11 +17,11 @@ namespace FileArchive.Controllers
         [Route("Files/{page:int?}")]
         public ViewResult Files(int page = 1)
         {
+            if (User is not {Identity: { }})
+                return View("Files", null);
+            
             var detailsForUser = 
-                _fileProvider
-                .FileDetails
-                .Where(detail => User is {Identity: { }} && detail.Owner == User.Identity.Name)
-                .ToList();
+                _fileProvider.GetFileDetailsForName(User?.Identity?.Name).ToList();
             
             var info = new PaginationInfo {
                 PageNumber = page,

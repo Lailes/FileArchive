@@ -52,8 +52,8 @@ li text {
 }
 
 .welcome-div{
-    background: #d1ddff; 
-    padding: 10px; 
+    background: #d1ddff;
+    padding: 10px;
     border-radius: 5px;
 }
 
@@ -65,13 +65,13 @@ li text {
     padding: 10px 10px 15px;
     background: #f1f8ff;
     border-radius:5px;
-    margin:5px;
+    margin: 5px  15px 5px 15px;
 }
 
 .pagination-div {
     padding: 15px;
     border-radius: 5px;
-    margin: 20px 5px 5px;
+    margin: 15px 15px 15px 15px;
     background: #f1f8ff;
 }
 
@@ -102,4 +102,12 @@ li text {
     padding: 10px;
     margin: 10px;
     border-radius: 5px;
+}
+
+.title-div {
+    display: inline-block;
+    width:100%;
+    background-color:#725da5;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
 }

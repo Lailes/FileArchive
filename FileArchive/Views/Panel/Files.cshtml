@@ -6,7 +6,15 @@
 
 @if (Model != null)
 {
-    <div class="shadow centered" style="border-radius: 5px;padding: 20px;background: #e8eeff; width: 50%">
+    <div class="shadow centered" style="border-radius: 5px;background: #e8eeff; width: 50%">
+        <div class="shadow title-div">
+            <div style="float: left">
+                <text style="color: #ffffff;">Total Files: @Model.TotalItems</text>
+            </div>
+            <div style="float: right">
+                <a class="btn btn-primary shadow" style="background-color: #3a2c5a;">Upload File</a>
+            </div>
+        </div>
         <div>
             @if (Model.FileDetailsEnumerable.Any())
             {
@@ -37,17 +45,14 @@
             }
         </div>
         <div class="shadow pagination-div"
-             page-model="@Model"        
-             selected-button-class="btn btn-secondary pagination-btn shadow" 
+             page-model="@Model"
+             selected-button-class="btn btn-secondary pagination-btn shadow"
              unselected-button-class="btn btn-light pagination-btn shadow"
              controller="Panel"
              button-start-class="btn btn-primary pagination-btn shadow"
              button-end-class="btn btn-primary pagination-btn shadow"
              div-class="shadow pagination-div view-div"
              action="Files"></div>
-        <div class="shadow pagination-div" style="text-align:center;">
-            <a class="btn btn-primary shadow" style="background-color: #3a2c5a;">Upload File</a>
-        </div>
     </div>
 }
 else

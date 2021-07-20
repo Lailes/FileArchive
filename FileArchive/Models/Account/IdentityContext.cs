@@ -1,10 +1,9 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace FileArchive.Models
+namespace FileArchive.Models.Account
 {
-    public class IdentityContext: IdentityDbContext<IdentityUser>
+    public class IdentityContext: IdentityDbContext<FileArchiveUser>
     {
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) {
         }

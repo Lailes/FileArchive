@@ -7,7 +7,7 @@ namespace FileArchive.Components
         
         public IViewComponentResult Invoke()
         {
-            return View();
+            return View("Default", User?.Identity?.Name);
         }
     }
 }

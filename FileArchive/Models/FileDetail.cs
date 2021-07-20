@@ -7,6 +7,6 @@ namespace FileArchive.Models
         public string FileName { get; set; }
         public ulong BytesCount { get; set; }
         public DateTime UploadDateTime { get; set; }
-        public string Owner { get; set; }
+        public string OwnerEmail { get; set; }
     }
 }

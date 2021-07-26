@@ -39,8 +39,7 @@ namespace FileArchive
 
             services.AddScoped<IFileDetailProvider, FileDetailProvider>();
             services.AddScoped<IFileSystemProvider, FileSystemProvider>(_ =>
-                                                                            new
-                                                                                FileSystemProvider(new
+                                                                            new FileSystemProvider(new
                                                                                     FileSystemProviderOptions {
                                                                                         Root =
                                                                                             _configuration
@@ -60,6 +59,10 @@ namespace FileArchive
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
                 SeedUser.EnsurePopulate(app);
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
             }
 
             app.UseAuthentication();

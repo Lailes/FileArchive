@@ -1,4 +1,4 @@
-@model string
+@model Exception
 
 @{
     Layout = "_Layout";
@@ -6,6 +6,6 @@
 
 <!DOCTYPE html>
 
-<div class="shadow centered">
-    @Model
+<div class="shadow centered" style="padding: 20px">
+    @Model.Message
 </div>

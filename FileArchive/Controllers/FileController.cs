@@ -1,9 +1,9 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FileArchive.Infrastructure;
 using FileArchive.Models;
-using FileArchive.Models.File;
 using FileArchive.Models.File.FileModels;
 using FileArchive.Models.File.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -27,9 +27,19 @@ namespace FileArchive.Controllers
 
 
         [HttpGet]
-        public async Task<FileResult> DownloadFile (int fileId)
+        [Route("Download/{fileId:int}")]
+        public async Task<IActionResult> DownloadFile (int fileId)
         {
-            throw new NotImplementedException();
+            using var file = _fileManager.GetArchiveFileById(fileId);
+            
+            if (file != null && file.OwnerUserName == User.Identity.Name)
+            {
+                var memory = new Memory<byte>();
+                await file.Stream.ReadAsync(memory);
+                return File(memory.ToArray(), "application/xxx", file.Name);
+            }
+
+            return NotFound();
         }
 
         [HttpPost]
@@ -38,40 +48,29 @@ namespace FileArchive.Controllers
             if (file == null)
                 return Redirect("/Files/List");
 
-            try
-            {
-                await _fileManager.SaveFile(new ArchiveFile {
-                    Name = file.FileName,
-                    OwnerUserName = User.Identity.Name,
-                    Stream = file.OpenReadStream()
-                });
-
-                return Redirect("/Files/List");
-            }
-            catch (Exception e)
-            {
-                return View("Error", e.Message);
-            }
+            await _fileManager.SaveFile(new ArchiveFile {
+                Name = file.FileName,
+                OwnerUserName = User.Identity.Name,
+                Stream = file.OpenReadStream()
+            });
+ 
+            return Redirect("/Files/List");
         }
 
         [HttpGet]
         [AllowAnonymous] // TODO: Proof speed of stream and bytes coping
-        [Route("[action]/{fileId:int}")]
-        public IActionResult DownloadAnonymus (int fileId)
+        [Route("Shared/{fileId:int}")]
+        public async Task<IActionResult> DownloadAnonymus (int fileId)
         {
-            try
-            {
-                var file = _fileManager.GetArchiveFileById(fileId);
+            using var file = _fileManager.GetArchiveFileById(fileId);
                 
-                if (file.Details.AllowAnonymus)
-                    return File(file.Stream, "application/xxx", file.Details.FileName);
-                
+            if (!file.Details.AllowAnonymus)
                 return NotFound();
-            }
-            catch (Exception e)
-            {
-                return View("Error", e.Message);
-            }
+
+            var memory = new Memory<byte>();
+            await file.Stream.ReadAsync(memory);
+            
+            return File(memory.ToArray(), "application/xxx", file.Details.FileName);
         }
 
         [HttpGet]
@@ -103,7 +102,7 @@ namespace FileArchive.Controllers
                       .GetFileDetailsForUser(User.Identity.Name)
                       .FirstOrDefault(detail => detail.Id == fileId);
 
-            return file == null ? View("Error", "No such file") : View(file);
+            return file == null ? View("Error", new FileNotFoundException("File not found")) : View(file);
         }
     }
 }

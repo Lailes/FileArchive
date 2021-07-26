@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using FileArchive.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -9,39 +7,37 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace FileArchive.Infrastructure
 {
     [HtmlTargetElement("div", Attributes = "page-model")]
-    public class PaginationTagHelper: TagHelper
+    public class PaginationTagHelper : TagHelper
     {
-        [ViewContext] 
-        [HtmlAttributeNotBound]
-        public ViewContext ViewContext { get; set; }
+        [ViewContext] [HtmlAttributeNotBound] public ViewContext ViewContext { get; set; }
 
         public string SelectedButtonClass { get; set; }
 
         public string UnselectedButtonClass { get; set; }
 
         public PaginationInfo PageModel { get; set; }
-        
+
         public string Controller { get; set; }
         public string Action { get; set; }
 
         public string DivClass { get; set; }
         public string ButtonStartClass { get; set; }
         public string ButtonEndClass { get; set; }
-        
+
         public string ButtonStyle { get; set; }
         public string ButtonStartStyle { get; set; }
         public string ButtonEndStyle { get; set; }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override void Process (TagHelperContext context, TagHelperOutput output)
         {
             var builder = new TagBuilder("div");
             var buttonTagBuilder = new TagBuilder("div");
 
             var page = PageModel.PageNumber;
-            var pageCount = PageModel.TotalItems / PageModel.ItemsPerPage;
+            var pageCount = Math.Ceiling((double) PageModel.TotalItems / PageModel.ItemsPerPage);
             if (pageCount < 5)
             {
-                for (var i = 1; i < pageCount; i++)
+                for (var i = 1; i <= pageCount; i++)
                 {
                     var tag = new TagBuilder("a");
                     tag.AddCssClass(i == page ? SelectedButtonClass : UnselectedButtonClass);
@@ -74,7 +70,7 @@ namespace FileArchive.Infrastructure
                     tag.InnerHtml.Append(i.ToString());
                     buttonTagBuilder.InnerHtml.AppendHtml(tag);
                 }
-                
+
                 var lastTag = new TagBuilder("a");
                 lastTag.AddCssClass(pageCount == page ? SelectedButtonClass : ButtonEndClass);
                 lastTag.Attributes["href"] = $"/{Controller}/{Action}/{pageCount}";
@@ -82,6 +78,7 @@ namespace FileArchive.Infrastructure
                 lastTag.InnerHtml.AppendHtml(pageCount.ToString());
                 buttonTagBuilder.InnerHtml.AppendHtml(lastTag);
             }
+
             buttonTagBuilder.Attributes["style"] = "text-align:center;";
             builder.InnerHtml.AppendHtml(buttonTagBuilder);
             output.Content.AppendHtml(builder.InnerHtml);

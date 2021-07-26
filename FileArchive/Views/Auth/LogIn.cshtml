@@ -1,19 +1,19 @@
-@model FileArchive.Models.Account.LogInData
+@model LogInData
 
 @{
     Layout = "_Layout";
 }
 
 <form class="shadow welcome-div centered" asp-action="LogIn">
-  <div class="mb-3">
-    <label class="form-label">E-Mail:</label>
-    <input class="form-control" asp-for="EMail">
-    <div class="form-text">Enter your E-Mail</div>
-  </div>
-  <div class="mb-3">
-    <label class="form-label">Password:</label>
-    <input type="password" class="form-control" asp-for="Password">
-  </div>
+    <div class="mb-3">
+        <label class="form-label">E-Mail:</label>
+        <input class="form-control" asp-for="EMail">
+        <div class="form-text">Enter your E-Mail</div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Password:</label>
+        <input type="password" class="form-control" asp-for="Password">
+    </div>
     <button type="submit" class="btn btn-primary">Log In</button>
     <a class="btn btn-secondary go-right" asp-controller="Home" asp-action="Index">Go back</a>
 </form>

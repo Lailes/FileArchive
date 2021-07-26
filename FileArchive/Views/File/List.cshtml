@@ -12,7 +12,10 @@
                 <text style="color: #ffffff;">Total Files: @Model.TotalItems</text>
             </div>
             <div style="float: right">
-                <a class="btn btn-primary shadow" style="background-color: #3a2c5a;">Upload File</a>
+                <form asp-controller="File" asp-action="UploadFile" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file">
+                    <input type="submit" value="Upload File" class="btn btn-primary shadow" style="background-color: #3a2c5a;">
+                </form>
             </div>
         </div>
         <div>
@@ -22,16 +25,8 @@
                 {
                     <div class="file-list-item shadow">
                         <div style="margin-right: 30px; display: inline-block; vertical-align: middle">
-                            <div>@detail.FileName</div>
-                            <div class="form-text">@detail.BytesCount</div>
-                            <div class="form-text">@detail.UploadDateTime</div>
-                        </div>
-                        <div style="display: inline-block; float: right">
-                            <div style="margin-bottom: 5px;">
-                                <a class="btn btn-download shadow">Download</a>
-                            </div>
-                            <div style="margin-bottom: 5px;">
-                                <a class="btn btn-delete shadow" style="width: 100%;">Delete</a>
+                            <div>
+                                <a asp-controller="File" asp-action="Detail" asp-route-fileId=@detail.Id>@detail.FileName</a>
                             </div>
                         </div>
                     </div>
@@ -48,11 +43,12 @@
              page-model="@Model"
              selected-button-class="btn btn-secondary pagination-btn shadow"
              unselected-button-class="btn btn-light pagination-btn shadow"
-             controller="Panel"
+             controller="Files"
              button-start-class="btn btn-primary pagination-btn shadow"
              button-end-class="btn btn-primary pagination-btn shadow"
              div-class="shadow pagination-div view-div"
-             action="Files"></div>
+             action="List">
+        </div>
     </div>
 }
 else

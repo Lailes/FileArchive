@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileArchive.Models.Account
 {
-    public class IdentityContext: IdentityDbContext<FileArchiveUser>
+    public class IdentityContext : IdentityDbContext<FileArchiveUser>
     {
-        public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) {
+        public IdentityContext (DbContextOptions<IdentityContext> options) : base(options)
+        {
         }
     }
 }

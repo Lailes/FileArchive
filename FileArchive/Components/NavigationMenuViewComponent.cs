@@ -4,8 +4,7 @@ namespace FileArchive.Components
 {
     public class NavigationMenuViewComponent : ViewComponent
     {
-        
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke ()
         {
             return View("Default", User?.Identity?.Name);
         }

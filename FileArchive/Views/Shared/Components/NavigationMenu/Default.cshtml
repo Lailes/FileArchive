@@ -5,12 +5,18 @@
 }
 
 <ul class="shadow">
-    <li><text style="margin-right: 20px;">File Archive</text></li>
+    <li>
+        <text style="margin-right: 20px;">File Archive</text>
+    </li>
     @if (Model != null)
     {
         <div>
-            <li><a asp-controller="Panel" asp-action="Files" style="vertical-align: middle" >Files</a></li>
-            <li><a asp-controller="Profile" asp-action="OverView" style="vertical-align: middle">Profile</a></li>
+            <li>
+                <a asp-controller="File" asp-action="List" style="vertical-align: middle">Files</a>
+            </li>
+            <li>
+                <a asp-controller="Profile" asp-action="OverView" style="vertical-align: middle">Profile</a>
+            </li>
             <li style="float: right; background: #1b0a3d; margin: 5px; border-radius: 5px;">
                 <a asp-controller="Auth" asp-action="SighOut">Sigh out</a>
             </li>

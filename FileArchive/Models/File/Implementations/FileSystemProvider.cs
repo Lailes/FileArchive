@@ -17,7 +17,7 @@ namespace FileArchive.Models.File.Implementations
 
         public async Task<FileDetail> SaveFileAsync (ArchiveFile archiveFile)
         {
-            var folder = Path.Combine(_options.Root, archiveFile.OwnerUserName);
+            var folder = Path.Combine(_options.Root, archiveFile.OwnerEmail);
 
             Directory.CreateDirectory(folder);
 
@@ -29,7 +29,7 @@ namespace FileArchive.Models.File.Implementations
             return new FileDetail {
                 BytesCount = stream.Length,
                 FileName = archiveFile.Name,
-                OwnerEmail = archiveFile.OwnerUserName,
+                OwnerEmail = archiveFile.OwnerEmail,
                 Path = path,
                 UploadDateTime = DateTime.Now
             };

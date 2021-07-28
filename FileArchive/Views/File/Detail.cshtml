@@ -1,5 +1,24 @@
-@model FileArchive.Models.File.FileModels.FileDetail
+@model FileDetailModel
 
 @{
     Layout = "_Layout";
 }
+
+<div class="shadow centered">
+    <div class="shadow title-div">
+        <text style="color: #ffffff">@Model.FileDetail.FileName</text>
+    </div>
+    <div style="padding: 10px">
+        @Model.FileDetail.BytesCount
+    </div>
+    <div style="padding: 10px">
+        @Model.FileDetail.UploadDateTime
+    </div>
+    <div style="text-align:center">
+        <div style="display: inline-block; padding: 10px">
+                <a class="btn btn-primary" asp-controller="File" asp-action="DownloadFile" asp-route-fileId="@Model.FileDetail.Id">Download</a>
+                <a class="btn btn-primary">Delete</a>
+                <a class="btn btn-secondary" asp-controller="File" asp-action="List" asp-route-page="@Model.BackPage" >Go back</a>
+            </div>
+    </div>
+</div>

@@ -9,6 +9,7 @@ using FileArchive.Models.File.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 // ReSharper disable PossibleNullReferenceException
 
@@ -30,15 +31,11 @@ namespace FileArchive.Controllers
         [Route("Download/{fileId:int}")]
         public async Task<IActionResult> DownloadFile (int fileId)
         {
-            using var file = _fileManager.GetArchiveFileById(fileId);
+            await using var file = _fileManager.GetArchiveFileById(fileId);
             
-            if (file != null && file.OwnerUserName == User.Identity.Name)
-            {
-                var memory = new Memory<byte>();
-                await file.Stream.ReadAsync(memory);
-                return File(memory.ToArray(), "application/xxx", file.Name);
-            }
-
+            if (file != null && file.Details.OwnerEmail == User.Identity.Name)
+                return File(await file.Stream.ReadArrayAsync(), "application/xxx", file.Name);
+            
             return NotFound();
         }
 
@@ -50,7 +47,7 @@ namespace FileArchive.Controllers
 
             await _fileManager.SaveFile(new ArchiveFile {
                 Name = file.FileName,
-                OwnerUserName = User.Identity.Name,
+                OwnerEmail = User.Identity.Name,
                 Stream = file.OpenReadStream()
             });
  
@@ -62,15 +59,12 @@ namespace FileArchive.Controllers
         [Route("Shared/{fileId:int}")]
         public async Task<IActionResult> DownloadAnonymus (int fileId)
         {
-            using var file = _fileManager.GetArchiveFileById(fileId);
+            await using var file = _fileManager.GetArchiveFileById(fileId);
                 
             if (!file.Details.AllowAnonymus)
                 return NotFound();
-
-            var memory = new Memory<byte>();
-            await file.Stream.ReadAsync(memory);
             
-            return File(memory.ToArray(), "application/xxx", file.Details.FileName);
+            return File(await file.Stream.ReadArrayAsync(), "application/xxx", file.Details.FileName);
         }
 
         [HttpGet]
@@ -96,13 +90,15 @@ namespace FileArchive.Controllers
 
         [HttpGet]
         [Route("[action]/{fileId:int}")]
-        public ViewResult Detail (int fileId)
+        public ViewResult Detail (int fileId, int backPage = 1)
         {
             var file = _fileManager
                       .GetFileDetailsForUser(User.Identity.Name)
                       .FirstOrDefault(detail => detail.Id == fileId);
-
-            return file == null ? View("Error", new FileNotFoundException("File not found")) : View(file);
+            
+            return file == null 
+                ? View("Error", new FileNotFoundException("File not found")) 
+                : View(new FileDetailModel { FileDetail = file, BackPage = backPage});
         }
     }
 }

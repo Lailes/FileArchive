@@ -26,7 +26,10 @@
                     <div class="file-list-item shadow">
                         <div style="margin-right: 30px; display: inline-block; vertical-align: middle">
                             <div>
-                                <a asp-controller="File" asp-action="Detail" asp-route-fileId=@detail.Id>@detail.FileName</a>
+                                <a asp-controller="File" 
+                                   asp-action="Detail" 
+                                   asp-route-fileId=@detail.Id 
+                                   asp-route-backPage="@Model.PageNumber">@detail.FileName</a>
                             </div>
                         </div>
                     </div>

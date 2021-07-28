@@ -39,5 +39,16 @@ namespace FileArchive.Models.File.Implementations
             
             return file;
         }
+
+        public async Task DeleteArchiveFileByIdAsync (int fileId)
+        {
+            var file = _fileDetailProvider.GetFileDetailById(fileId);
+
+            await _fileSystemProvider.DeleteFileEntity(file.Path);
+            await _fileDetailProvider.DeleteFileDetail(file.Id);
+        }
+
+        public bool VerifyOwner (int fileId, string userName) =>
+            _fileDetailProvider.GetFileDetailById(fileId).OwnerEmail == userName;
     }
 }

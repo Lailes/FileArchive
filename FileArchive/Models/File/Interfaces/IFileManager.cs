@@ -9,5 +9,7 @@ namespace FileArchive.Models.File.Interfaces
         public Task SaveFile (ArchiveFile archiveFile);
         public IEnumerable<FileDetail> GetFileDetailsForUser (string userName);
         public ArchiveFile GetArchiveFileById (int fileId);
+        public Task DeleteArchiveFileByIdAsync (int fileId);
+        public bool VerifyOwner (int fileId, string userName);
     }
 }

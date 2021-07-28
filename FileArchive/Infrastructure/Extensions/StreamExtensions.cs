@@ -1,8 +1,8 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
-using System;
 
-namespace FileArchive.Infrastructure
+namespace FileArchive.Infrastructure.Extensions
 {
     public static class StreamExtensions
     {

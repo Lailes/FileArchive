@@ -16,9 +16,19 @@
     </div>
     <div style="text-align:center">
         <div style="display: inline-block; padding: 10px">
-                <a class="btn btn-primary" asp-controller="File" asp-action="DownloadFile" asp-route-fileId="@Model.FileDetail.Id">Download</a>
-                <a class="btn btn-primary">Delete</a>
-                <a class="btn btn-secondary" asp-controller="File" asp-action="List" asp-route-page="@Model.BackPage" >Go back</a>
+            <a class="btn btn-primary" 
+               asp-controller="File" 
+               asp-action="DownloadFile" 
+               asp-route-fileId="@Model.FileDetail.Id">Download</a>
+            <a class="btn btn-primary" 
+               asp-controller="File" 
+               asp-action="Delete" 
+               asp-route-fileId="@Model.FileDetail.Id" 
+               asp-route-backPage="@Model.BackPage">Delete</a>
+            <a class="btn btn-secondary" 
+               asp-controller="File" 
+               asp-action="List" 
+               asp-route-page="@Model.BackPage" >Go back</a>
             </div>
     </div>
 </div>

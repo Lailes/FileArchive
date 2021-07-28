@@ -47,6 +47,17 @@ namespace FileArchive.Models.File.Implementations
                 Stream = fileInfo.Open(FileMode.Open)
             };
         }
+
+        public async Task DeleteFileEntity (string path)
+        {
+            await Task.Yield();
+            var fileInfo = new FileInfo(path);
+
+            if (!fileInfo.Exists)
+                throw new FileNotFoundException();
+            
+            fileInfo.Delete();
+        }
     }
 
     public struct FileSystemProviderOptions

@@ -1,16 +1,14 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FileArchive.Infrastructure;
+using FileArchive.Infrastructure.Extensions;
 using FileArchive.Models;
 using FileArchive.Models.File.FileModels;
 using FileArchive.Models.File.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 // ReSharper disable PossibleNullReferenceException
 
 namespace FileArchive.Controllers
@@ -21,11 +19,8 @@ namespace FileArchive.Controllers
     {
         private readonly IFileManager _fileManager;
 
-        public FileController (IFileManager fileManager)
-        {
-            _fileManager = fileManager;
-        }
-
+        public FileController (IFileManager fileManager) => _fileManager = fileManager;
+        
 
         [HttpGet]
         [Route("Download/{fileId:int}")]
@@ -69,7 +64,7 @@ namespace FileArchive.Controllers
 
         [HttpGet]
         [Route("[action]/{page:int?}")]
-        public ViewResult List (int page = 1)
+        public IActionResult List (int page = 1)
         {
             var detailsForUser = _fileManager
                                 .GetFileDetailsForUser(User.Identity.Name)
@@ -85,12 +80,15 @@ namespace FileArchive.Controllers
                                        .Take(Constants.PageSize)
             };
 
+            if (page != 1 && !info.FileDetailsEnumerable.Any())
+                return RedirectToAction("List", page - 1);
+            
             return View(info);
         }
 
         [HttpGet]
         [Route("[action]/{fileId:int}")]
-        public ViewResult Detail (int fileId, int backPage = 1)
+        public IActionResult Detail (int fileId, int backPage = 1)
         {
             var file = _fileManager
                       .GetFileDetailsForUser(User.Identity.Name)
@@ -99,6 +97,18 @@ namespace FileArchive.Controllers
             return file == null 
                 ? View("Error", new FileNotFoundException("File not found")) 
                 : View(new FileDetailModel { FileDetail = file, BackPage = backPage});
+        }
+
+        [HttpGet]
+        [Route("[action]/{fileId:int}")]
+        public async Task<IActionResult> Delete (int fileId, int backPage)
+        {
+            if (!_fileManager.VerifyOwner(fileId, User.Identity.Name))
+                return NotFound();
+            
+            await _fileManager.DeleteArchiveFileByIdAsync(fileId);
+            
+            return RedirectToAction("List", backPage);
         }
     }
 }

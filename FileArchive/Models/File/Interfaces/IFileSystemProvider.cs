@@ -7,5 +7,6 @@ namespace FileArchive.Models.File.Interfaces
     {
         public Task<FileDetail> SaveFileAsync (ArchiveFile archiveFile);
         public ArchiveFile GetFileEntity (string path);
+        public Task DeleteFileEntity (string path);
     }
 }

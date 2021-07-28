@@ -9,5 +9,6 @@ namespace FileArchive.Models.File.Interfaces
         public IEnumerable<FileDetail> GetFileDetailForUser (string user);
         public Task SaveFileDetailAsync (FileDetail fileDetail);
         public FileDetail GetFileDetailById (int fileId);
+        public Task DeleteFileDetail (int fileId);
     }
 }

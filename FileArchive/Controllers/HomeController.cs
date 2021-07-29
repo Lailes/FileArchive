@@ -5,9 +5,7 @@ namespace FileArchive.Controllers
     public class HomeController : Controller
     {
         [HttpGet]
-        public IActionResult Index ()
-        {
-            return User.Identity.IsAuthenticated ? Redirect("/Profile") : View();
-        }
+        public IActionResult Index () => User.Identity.IsAuthenticated ? Redirect("/Profile") : View();
+                             
     }
 }

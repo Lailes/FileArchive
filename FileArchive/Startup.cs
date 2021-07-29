@@ -38,13 +38,7 @@ namespace FileArchive
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(_configuration[MsSqlConfig]));
 
             services.AddScoped<IFileDetailProvider, FileDetailProvider>();
-            services.AddScoped<IFileSystemProvider, FileSystemProvider>(_ =>
-                                                                            new FileSystemProvider(new
-                                                                                    FileSystemProviderOptions {
-                                                                                        Root =
-                                                                                            _configuration
-                                                                                                [RootPath]
-                                                                                    }));
+            services.AddScoped<IFileSystemProvider, FileSystemProvider>(_ => new FileSystemProvider(new FileSystemProviderOptions (_configuration[RootPath])));
             services.AddScoped<IFileManager, FileManager>();
 
             services.AddMemoryCache();

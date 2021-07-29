@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +28,8 @@ namespace FileArchive.Models.File.Implementations
         }
 
         public FileDetail GetFileDetailById (int fileId) => 
-            _applicationContext.FileDetails.FirstOrDefault(detail => detail.Id == fileId) 
+            _applicationContext.FileDetails
+                               .FirstOrDefault(detail => detail.Id == fileId) 
                                                          ?? throw new FileDetailNotfoundException();
 
         public async Task DeleteFileDetail (int fileId)
@@ -35,6 +37,28 @@ namespace FileArchive.Models.File.Implementations
             var detail = GetFileDetailById(fileId);
             
             _applicationContext.FileDetails.Remove(detail);
+            await _applicationContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateFileDetail (FileDetail fileDetail)
+        {
+            if (fileDetail.Id == 0)
+                throw new ArgumentException("File detail ID in null");
+
+            var detail = GetFileDetailById(fileDetail.Id);
+
+            if (fileDetail.Path != null)
+                detail.Path = fileDetail.Path;
+            
+            
+            if (fileDetail.FileName != null)
+                detail.FileName = fileDetail.FileName;
+            
+            if (fileDetail.AllowAnonymus != null)
+                detail.AllowAnonymus = fileDetail.AllowAnonymus;
+
+            _applicationContext.Entry(detail).State = EntityState.Modified;
+            
             await _applicationContext.SaveChangesAsync();
         }
     }

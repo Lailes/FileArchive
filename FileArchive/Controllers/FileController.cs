@@ -56,7 +56,7 @@ namespace FileArchive.Controllers
         {
             await using var file = _fileManager.GetArchiveFileById(fileId);
                 
-            if (!file.Details.AllowAnonymus)
+            if (file.Details.AllowAnonymus == false)
                 return NotFound();
             
             return File(await file.Stream.ReadArrayAsync(), "application/xxx", file.Details.FileName);
@@ -109,6 +109,16 @@ namespace FileArchive.Controllers
             await _fileManager.DeleteArchiveFileByIdAsync(fileId);
             
             return RedirectToAction("List", backPage);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeSharedAccess (int fileId, bool access)
+        {
+            if (_fileManager.VerifyOwner(fileId, User.Identity.Name))
+                return NotFound();
+                
+            await _fileManager.UpdateArchiveFile(new FileUpdateInfo {Id = fileId, NewAccess = access});
+            return RedirectToAction("Detail", new []{fileId, 1});
         }
     }
 }

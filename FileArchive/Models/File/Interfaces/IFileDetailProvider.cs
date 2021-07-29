@@ -10,5 +10,6 @@ namespace FileArchive.Models.File.Interfaces
         public Task SaveFileDetailAsync (FileDetail fileDetail);
         public FileDetail GetFileDetailById (int fileId);
         public Task DeleteFileDetail (int fileId);
+        public Task UpdateFileDetail (FileDetail fileDetail);
     }
 }

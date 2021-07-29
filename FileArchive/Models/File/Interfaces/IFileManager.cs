@@ -10,6 +10,7 @@ namespace FileArchive.Models.File.Interfaces
         public IEnumerable<FileDetail> GetFileDetailsForUser (string userName);
         public ArchiveFile GetArchiveFileById (int fileId);
         public Task DeleteArchiveFileByIdAsync (int fileId);
+        public Task UpdateArchiveFile (FileUpdateInfo info);
         public bool VerifyOwner (int fileId, string userName);
     }
 }

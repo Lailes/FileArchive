@@ -48,6 +48,20 @@ namespace FileArchive.Models.File.Implementations
             await _fileDetailProvider.DeleteFileDetail(file.Id);
         }
 
+        public async Task UpdateArchiveFile (FileUpdateInfo info)
+        {
+            var detail = _fileDetailProvider.GetFileDetailById(info.Id);
+            
+            if (info.NewName != null)
+                await _fileDetailProvider.UpdateFileDetail(await _fileSystemProvider.UpdateFileName(detail.Path, info.NewName));
+            
+            if (info.NewData != null)
+                await _fileDetailProvider.UpdateFileDetail(await _fileSystemProvider.UpdateFileData(detail.Path, info.NewData));
+
+            if (detail.AllowAnonymus != info.NewAccess)
+                await _fileDetailProvider.UpdateFileDetail(new FileDetail {Id = detail.Id, AllowAnonymus = info.NewAccess});
+        }
+
         public bool VerifyOwner (int fileId, string userName) =>
             _fileDetailProvider.GetFileDetailById(fileId).OwnerEmail == userName;
     }

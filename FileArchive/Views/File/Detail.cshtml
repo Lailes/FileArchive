@@ -57,6 +57,12 @@
                            class="btn btn-light"
                            style="margin-right: 10px; border-color: #0a8b00"></a>
                         <button value="Copy" class="btn btn-secondary" onclick="pasteToClipboard()">Copy</button>
+                        <a asp-controller="File" 
+                           asp-action="ChangeSharedAccess" 
+                           asp-route-fileId="@Model.FileDetail.Id"
+                           asp-route-access="false"  
+                           class="btn btn-light"
+                           style="margin-left: 10px; border-color: #992929">Close</a>
                     </div>
                 </div>
             </div>

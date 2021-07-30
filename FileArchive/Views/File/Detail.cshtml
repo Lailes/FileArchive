@@ -4,6 +4,25 @@
     Layout = "_Layout";
 }
 
+<script src="lib/clipboard/clipboard.min.js"></script>
+
+<script>
+    window.onload = function () {
+        let link = document.getElementById('link').getAttribute('href');
+        let fullLink = document.location.origin + link;
+        document.getElementById('link').append(fullLink);  
+        console.log('Link: ' + fullLink)
+    };
+
+    function pasteToClipboard() {
+        let link = document.getElementById('link').getAttribute('href');
+        if (link){
+            let fullLink = document.location.origin + link;
+            navigator.clipboard.writeText(fullLink).then(()=>{}).catch(err => alert(err.message));    
+        }
+    }
+</script>
+
 <div class="shadow centered">
     <div class="shadow title-div">
         <text style="color: #ffffff">@Model.FileDetail.FileName</text>
@@ -19,12 +38,28 @@
         @if (Model.FileDetail.AllowAnonymus == false)
         {
             <div>
-                
+                <a class="btn btn-secondary" 
+                   asp-controller="File"
+                   asp-action="ChangeSharedAccess" 
+                   asp-route-fileId="@Model.FileDetail.Id"
+                   asp-route-access="true">Make shared</a>
             </div>
         }
         else
         {
-            
+            <div style="text-align: center">
+                <div style="display: inline-block; padding: 10px">
+                    <div>
+                        <a id="link" 
+                           asp-controller="File" 
+                           asp-action="DownloadAnonymus" 
+                           asp-route-fileId="@Model.FileDetail.Id"
+                           class="btn btn-light"
+                           style="margin-right: 10px; border-color: #0a8b00"></a>
+                        <button value="Copy" class="btn btn-secondary" onclick="pasteToClipboard()">Copy</button>
+                    </div>
+                </div>
+            </div>
         }
         
         <div style="display: inline-block; padding: 10px">
@@ -32,7 +67,7 @@
                asp-controller="File" 
                asp-action="DownloadFile" 
                asp-route-fileId="@Model.FileDetail.Id">Download</a>
-            <a class="btn btn-primary" 
+            <a class="btn btn-danger" 
                asp-controller="File" 
                asp-action="Delete" 
                asp-route-fileId="@Model.FileDetail.Id" 

@@ -112,13 +112,16 @@ namespace FileArchive.Controllers
         }
 
         [HttpGet]
+        [Route("[action]/{fileId:int}")]
         public async Task<IActionResult> ChangeSharedAccess (int fileId, bool access)
         {
-            if (_fileManager.VerifyOwner(fileId, User.Identity.Name))
+            if (!_fileManager.VerifyOwner(fileId, User.Identity.Name))
                 return NotFound();
                 
             await _fileManager.UpdateArchiveFile(new FileUpdateInfo {Id = fileId, NewAccess = access});
             return RedirectToAction("Detail", new []{fileId, 1});
         }
+
+
     }
 }

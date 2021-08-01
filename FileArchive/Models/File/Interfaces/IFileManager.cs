@@ -12,5 +12,6 @@ namespace FileArchive.Models.File.Interfaces
         public Task DeleteArchiveFileByIdAsync (int fileId);
         public Task UpdateArchiveFile (FileUpdateInfo info);
         public bool VerifyOwner (int fileId, string userName);
+        Task<long> GetUsedBytesAsync (string userEmail);
     }
 }

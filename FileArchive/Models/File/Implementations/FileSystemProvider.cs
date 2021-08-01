@@ -26,7 +26,8 @@ namespace FileArchive.Models.File.Implementations
             
             await using var stream = new FileStream(path, FileMode.Create);
             await archiveFile.Stream.CopyToAsync(stream);
-
+            await archiveFile.Stream.DisposeAsync();
+            
             return new FileDetail {
                 BytesCount = stream.Length,
                 FileName = archiveFile.Name,

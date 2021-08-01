@@ -1,9 +1,11 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FileArchive.Infrastructure;
 using FileArchive.Infrastructure.Extensions;
 using FileArchive.Models;
+using FileArchive.Models.Account;
 using FileArchive.Models.File.FileModels;
 using FileArchive.Models.File.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -18,8 +20,15 @@ namespace FileArchive.Controllers
     public class FileController : Controller
     {
         private readonly IFileManager _fileManager;
+        private readonly ISpaceProvider _spaceProvider;
+        private readonly IArchiveUserManager _userManager;
 
-        public FileController (IFileManager fileManager) => _fileManager = fileManager;
+        public FileController (IFileManager fileManager, ISpaceProvider spaceProvider, IArchiveUserManager userManager)
+        {
+            _fileManager = fileManager;
+            _spaceProvider = spaceProvider;
+            _userManager = userManager;
+        }
         
 
         [HttpGet]
@@ -40,6 +49,12 @@ namespace FileArchive.Controllers
             if (file == null)
                 return Redirect("/Files/List");
 
+            var usedBytes = await _fileManager.GetUsedBytesAsync(User.Identity.Name);
+            var totalBytes = _spaceProvider.GetSpaceForStatus(_userManager.GetStatus(User.Identity.Name));
+            
+            if (totalBytes < usedBytes + file.Length)
+                return View("Error", new Exception("No enouth space"));
+            
             await _fileManager.SaveFile(new ArchiveFile {
                 Name = file.FileName,
                 OwnerEmail = User.Identity.Name,
@@ -113,15 +128,16 @@ namespace FileArchive.Controllers
 
         [HttpGet]
         [Route("[action]/{fileId:int}")]
-        public async Task<IActionResult> ChangeSharedAccess (int fileId, bool access)
+        public async Task<IActionResult> ChangeSharedAccess (int fileId, bool access, int page = 1)
         {
             if (!_fileManager.VerifyOwner(fileId, User.Identity.Name))
                 return NotFound();
                 
             await _fileManager.UpdateArchiveFile(new FileUpdateInfo {Id = fileId, NewAccess = access});
-            return RedirectToAction("Detail", new []{fileId, 1});
+            
+            return RedirectToAction("Detail", new []{fileId, page});
         }
-
-
     }
+
+    
 }

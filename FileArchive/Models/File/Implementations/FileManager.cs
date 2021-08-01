@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using FileArchive.Exceptions;
 using FileArchive.Models.File.FileModels;
@@ -7,6 +7,7 @@ using FileArchive.Models.File.Interfaces;
 
 namespace FileArchive.Models.File.Implementations
 {
+
     public class FileManager : IFileManager
     {
         private readonly IFileDetailProvider _fileDetailProvider;
@@ -64,5 +65,17 @@ namespace FileArchive.Models.File.Implementations
 
         public bool VerifyOwner (int fileId, string userName) =>
             _fileDetailProvider.GetFileDetailById(fileId).OwnerEmail == userName;
+
+        public Task<long> GetUsedBytesAsync (string userEmail) =>
+            Task.Run(() =>
+            {
+                return _fileDetailProvider.GetFileDetailForUser(userEmail)
+                                          .Select(detail =>
+                                           {
+                                               using var file = _fileSystemProvider.GetFileEntity(detail.Path);
+                                               return file.Stream.Length;
+                                           })
+                                          .Sum();
+            });
     }
 }

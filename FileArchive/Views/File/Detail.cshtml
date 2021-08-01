@@ -11,7 +11,6 @@
         let link = document.getElementById('link').getAttribute('href');
         let fullLink = document.location.origin + link;
         document.getElementById('link').append(fullLink);  
-        console.log('Link: ' + fullLink)
     };
 
     function pasteToClipboard() {
@@ -28,10 +27,10 @@
         <text style="color: #ffffff">@Model.FileDetail.FileName</text>
     </div>
     <div style="padding: 10px">
-        @Model.FileDetail.BytesCount
+        Size: @(Model.FileDetail.BytesCount/1024) Kb
     </div>
     <div style="padding: 10px">
-        @Model.FileDetail.UploadDateTime
+        Date: @Model.FileDetail.UploadDateTime
     </div>
     <div style="text-align:center">
     
@@ -60,7 +59,8 @@
                         <a asp-controller="File" 
                            asp-action="ChangeSharedAccess" 
                            asp-route-fileId="@Model.FileDetail.Id"
-                           asp-route-access="false"  
+                           asp-route-access="false"
+                           asp-route-page="@Model.BackPage"
                            class="btn btn-light"
                            style="margin-left: 10px; border-color: #992929">Close</a>
                     </div>

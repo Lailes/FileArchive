@@ -16,7 +16,10 @@ namespace FileArchive.Controllers
         private readonly IUserLevelProvider _userLevelProvider;
         private readonly ISpaceProvider _spaceProvider;
 
-        public ProfileController (IFileManager fileManager, UserManager<FileArchiveUser> userManager, IUserLevelProvider userLevelProvider, ISpaceProvider spaceProvider)
+        public ProfileController (IFileManager fileManager,
+                                  UserManager<FileArchiveUser> userManager,
+                                  IUserLevelProvider userLevelProvider, 
+                                  ISpaceProvider spaceProvider)
         {
             _fileManager = fileManager;
             _userManager = userManager;

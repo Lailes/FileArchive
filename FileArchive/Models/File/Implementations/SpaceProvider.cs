@@ -18,6 +18,6 @@ namespace FileArchive.Models.File.Implementations
         }
 
         public ISpaceProvider AddStatus (string name, byte status, long bytesCount) =>
-            AddStatus(new(name, status, bytesCount));
+            AddStatus(new (name, status, bytesCount));
     }
 }

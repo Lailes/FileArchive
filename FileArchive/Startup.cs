@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using FileArchive.Models.Account;
 using FileArchive.Models.Dummies;
 using FileArchive.Models.File;
@@ -17,8 +16,8 @@ namespace FileArchive
     public class Startup
     {
         private const string IdentityConfig = "Identity:ConnectionString";
-        private const string MsSqlConfig = "MsSqlConfig:ConnectionString";
-        private const string RootPath = @"Storage:RootPath";
+        private const string MsSqlConfig    = "MsSqlConfig:ConnectionString";
+        private const string RootPath       = "Storage:RootPath";
 
         private readonly IConfiguration _configuration;
 
@@ -39,8 +38,8 @@ namespace FileArchive
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(_configuration[MsSqlConfig]));
 
             services.AddSingleton(_ => new SpaceProvider()
-                                      .AddStatus("Default", 0, 1024 * 1024 * 5)
-                                      .AddStatus("Privileged", 1, 1024 * 1024 * 5 * 10));
+                                      .AddStatus("Default", 0, 5352980480)
+                                      .AddStatus("Privileged", 1, 53529804800));
             
             services.AddScoped<IFileDetailProvider, FileDetailProvider>();
             services.AddScoped<IFileSystemProvider, FileSystemProvider>(_ => new FileSystemProvider(new FileSystemProviderOptions (_configuration[RootPath])));

@@ -94,12 +94,12 @@ namespace FileArchive.Controllers
                 PageNumber = page,
                 ItemsPerPage = Constants.PageSize,
                 TotalItems = detailsForUser.Count,
-                FileDetailsEnumerable = detailsForUser
+                FileDetails = detailsForUser
                                        .Skip((page - 1) * Constants.PageSize)
                                        .Take(Constants.PageSize)
             };
 
-            if (page != 1 && !info.FileDetailsEnumerable.Any())
+            if (page != 1 && !info.FileDetails.Any())
                 return RedirectToAction("List", page - 1);
             
             return View(info);

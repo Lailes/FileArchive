@@ -20,18 +20,20 @@ namespace FileArchive.Models.File.Implementations
         public IEnumerable<FileDetail> GetFileDetailForUser (string user) =>
              _applicationContext.FileDetails.Where(detail => detail.OwnerEmail == user);
         
-
+        
         public async Task SaveFileDetailAsync (FileDetail fileDetail)
         {
             await _applicationContext.FileDetails.AddAsync(fileDetail);
             await _applicationContext.SaveChangesAsync();
         }
 
-        public FileDetail GetFileDetailById (int fileId) => 
+        
+        public FileDetail GetFileDetailById (int fileId) =>
             _applicationContext.FileDetails
                                .FirstOrDefault(detail => detail.Id == fileId) 
                                                          ?? throw new FileDetailNotfoundException();
-
+        
+        
         public async Task DeleteFileDetail (int fileId)
         {
             var detail = GetFileDetailById(fileId);
@@ -40,6 +42,7 @@ namespace FileArchive.Models.File.Implementations
             await _applicationContext.SaveChangesAsync();
         }
 
+        
         public async Task UpdateFileDetail (FileDetail fileDetail)
         {
             if (fileDetail.Id == 0)

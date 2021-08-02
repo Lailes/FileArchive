@@ -22,66 +22,68 @@
     }
 </script>
 
-<div class="shadow centered">
+<div class="shadow centered" style="border-radius: 5px">
     <div class="shadow title-div">
-        <text style="color: #ffffff">@Model.FileDetail.FileName</text>
+        <text style="color: #ffffff; text-align: center">@Model.FileDetail.FileName</text>
     </div>
-    <div style="padding: 10px">
-        Size: @(Model.FileDetail.BytesCount/1024) Kb
-    </div>
-    <div style="padding: 10px">
-        Date: @Model.FileDetail.UploadDateTime
-    </div>
-    <div style="text-align:center">
-    
-        @if (Model.FileDetail.AllowAnonymus == false)
-        {
-            <div>
-                <a class="btn btn-secondary" 
-                   asp-controller="File"
-                   asp-action="ChangeSharedAccess" 
-                   asp-route-fileId="@Model.FileDetail.Id"
-                   asp-route-access="true">Make shared</a>
+    <div class="sample-div">
+        <div style="padding: 10px">
+                Size: @(Model.FileDetail.BytesCount/1024) Kb
             </div>
-        }
-        else
-        {
-            <div style="text-align: center">
-                <div style="display: inline-block; padding: 10px">
+            <div style="padding: 10px">
+                Date: @Model.FileDetail.UploadDateTime
+            </div>
+            <div style="text-align:center">
+            
+                @if (Model.FileDetail.AllowAnonymus == false)
+                {
                     <div>
-                        <a id="link" 
-                           asp-controller="File" 
-                           asp-action="DownloadAnonymus" 
-                           asp-route-fileId="@Model.FileDetail.Id"
-                           class="btn btn-light"
-                           style="margin-right: 10px; border-color: #0a8b00"></a>
-                        <button value="Copy" class="btn btn-secondary" onclick="pasteToClipboard()">Copy</button>
-                        <a asp-controller="File" 
+                        <a class="btn btn-secondary" 
+                           asp-controller="File"
                            asp-action="ChangeSharedAccess" 
                            asp-route-fileId="@Model.FileDetail.Id"
-                           asp-route-access="false"
-                           asp-route-page="@Model.BackPage"
-                           class="btn btn-light"
-                           style="margin-left: 10px; border-color: #992929">Close</a>
+                           asp-route-access="true">Make shared</a>
                     </div>
-                </div>
-            </div>
-        }
-        
-        <div style="display: inline-block; padding: 10px">
-            <a class="btn btn-primary" 
-               asp-controller="File" 
-               asp-action="DownloadFile" 
-               asp-route-fileId="@Model.FileDetail.Id">Download</a>
-            <a class="btn btn-danger" 
-               asp-controller="File" 
-               asp-action="Delete" 
-               asp-route-fileId="@Model.FileDetail.Id" 
-               asp-route-backPage="@Model.BackPage">Delete</a>
-            <a class="btn btn-secondary" 
-               asp-controller="File" 
-               asp-action="List" 
-               asp-route-page="@Model.BackPage" >Go back</a>
+                }
+                else
+                {
+                    <div style="text-align: center">
+                        <div style="display: inline-block; padding: 10px">
+                            <div>
+                                <a id="link" 
+                                   asp-controller="File" 
+                                   asp-action="DownloadAnonymus" 
+                                   asp-route-fileId="@Model.FileDetail.Id"
+                                   class="btn btn-light"
+                                   style="margin-right: 10px; border-color: #0a8b00"></a>
+                                <button value="Copy" class="btn btn-secondary" onclick="pasteToClipboard()">Copy</button>
+                                <a asp-controller="File" 
+                                   asp-action="ChangeSharedAccess" 
+                                   asp-route-fileId="@Model.FileDetail.Id"
+                                   asp-route-access="false"
+                                   asp-route-page="@Model.BackPage"
+                                   class="btn btn-light"
+                                   style="margin-left: 10px; border-color: #992929">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+                <div style="display: inline-block; padding: 10px">
+                    <a class="btn btn-primary" 
+                       asp-controller="File" 
+                       asp-action="DownloadFile" 
+                       asp-route-fileId="@Model.FileDetail.Id">Download</a>
+                    <a class="btn btn-danger" 
+                       asp-controller="File" 
+                       asp-action="Delete" 
+                       asp-route-fileId="@Model.FileDetail.Id" 
+                       asp-route-backPage="@Model.BackPage">Delete</a>
+                    <a class="btn btn-secondary" 
+                       asp-controller="File" 
+                       asp-action="List" 
+                       asp-route-page="@Model.BackPage" >Go back</a>
+                    </div>
             </div>
     </div>
 </div>

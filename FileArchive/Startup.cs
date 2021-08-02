@@ -38,9 +38,14 @@ namespace FileArchive
 
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(_configuration[MsSqlConfig]));
 
+            services.AddSingleton(_ => new SpaceProvider()
+                                      .AddStatus("Default", 0, 1024 * 1024 * 5)
+                                      .AddStatus("Privileged", 1, 1024 * 1024 * 5 * 10));
+            
             services.AddScoped<IFileDetailProvider, FileDetailProvider>();
             services.AddScoped<IFileSystemProvider, FileSystemProvider>(_ => new FileSystemProvider(new FileSystemProviderOptions (_configuration[RootPath])));
             services.AddScoped<IFileManager, FileManager>();
+            services.AddScoped<IUserLevelProvider, IdentityContext>();
 
             services.AddMemoryCache();
             services.AddSession();

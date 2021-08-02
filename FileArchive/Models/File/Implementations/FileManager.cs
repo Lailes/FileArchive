@@ -49,7 +49,7 @@ namespace FileArchive.Models.File.Implementations
             await _fileDetailProvider.DeleteFileDetail(file.Id);
         }
 
-        public async Task UpdateArchiveFile (FileUpdateInfo info)
+        public async Task UpdateArchiveFileAsync (FileUpdateInfo info)
         {
             var detail = _fileDetailProvider.GetFileDetailById(info.Id);
             

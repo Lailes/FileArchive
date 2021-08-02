@@ -4,14 +4,19 @@
     Layout = "_Layout";
 }
 
-<div class="centered shadow welcome-div">
-    <div class="shadow profile-info-div">
-        Welcome, @Model.UserName
+<div class="centered shadow" style="border-radius: 5px">
+    <div class="shadow title-div">
+        <text style="color: #ffffff; text-align: center; horiz-align: center">Welcome, @Model.UserName</text>
     </div>
-    <div class="shadow profile-info-div">
-        Total files: @Model.FileCount
-    </div>
-    <div class="shadow profile-info-div">
-        Used space: @(Model.BytesCount / 1024) Mb
+    <div class="sample-div">
+         <div class="shadow profile-info-div">
+             E-Mail: @Model.EMail
+         </div>
+         <div class="shadow profile-info-div">
+             User level: @(Model.UserLevel)
+         </div>
+         <div class="shadow profile-info-div">
+             Used space: @(Model.UsedBytes / 1024) Kb
+         </div>
     </div>
 </div>

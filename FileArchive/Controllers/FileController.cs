@@ -2,15 +2,18 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
 using FileArchive.Infrastructure;
 using FileArchive.Infrastructure.Extensions;
 using FileArchive.Models;
 using FileArchive.Models.Account;
 using FileArchive.Models.File.FileModels;
 using FileArchive.Models.File.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+
 // ReSharper disable PossibleNullReferenceException
 
 namespace FileArchive.Controllers
@@ -21,13 +24,13 @@ namespace FileArchive.Controllers
     {
         private readonly IFileManager _fileManager;
         private readonly ISpaceProvider _spaceProvider;
-        private readonly IArchiveUserManager _userManager;
+        private readonly IUserLevelProvider _userLevelProvider;
 
-        public FileController (IFileManager fileManager, ISpaceProvider spaceProvider, IArchiveUserManager userManager)
+        public FileController (IFileManager fileManager, ISpaceProvider spaceProvider, IUserLevelProvider userLevelProvider)
         {
             _fileManager = fileManager;
             _spaceProvider = spaceProvider;
-            _userManager = userManager;
+            _userLevelProvider = userLevelProvider;
         }
         
 
@@ -43,6 +46,7 @@ namespace FileArchive.Controllers
             return NotFound();
         }
 
+
         [HttpPost]
         public async Task<IActionResult> UploadFile (IFormFile file)
         {
@@ -50,7 +54,7 @@ namespace FileArchive.Controllers
                 return Redirect("/Files/List");
 
             var usedBytes = await _fileManager.GetUsedBytesAsync(User.Identity.Name);
-            var totalBytes = _spaceProvider.GetSpaceForStatus(_userManager.GetStatus(User.Identity.Name));
+            var totalBytes = _spaceProvider.GetSpaceForStatus(_userLevelProvider.GetStatus(User.Identity.Name));
             
             if (totalBytes < usedBytes + file.Length)
                 return View("Error", new Exception("No enouth space"));
@@ -60,12 +64,12 @@ namespace FileArchive.Controllers
                 OwnerEmail = User.Identity.Name,
                 Stream = file.OpenReadStream()
             });
- 
+
             return Redirect("/Files/List");
         }
 
         [HttpGet]
-        [AllowAnonymous] // TODO: Proof speed of stream and bytes coping
+        [AllowAnonymous]
         [Route("Shared/{fileId:int}")]
         public async Task<IActionResult> DownloadAnonymus (int fileId)
         {
@@ -109,6 +113,7 @@ namespace FileArchive.Controllers
                       .GetFileDetailsForUser(User.Identity.Name)
                       .FirstOrDefault(detail => detail.Id == fileId);
             
+
             return file == null 
                 ? View("Error", new FileNotFoundException("File not found")) 
                 : View(new FileDetailModel { FileDetail = file, BackPage = backPage});
@@ -133,7 +138,7 @@ namespace FileArchive.Controllers
             if (!_fileManager.VerifyOwner(fileId, User.Identity.Name))
                 return NotFound();
                 
-            await _fileManager.UpdateArchiveFile(new FileUpdateInfo {Id = fileId, NewAccess = access});
+            await _fileManager.UpdateArchiveFileAsync(new FileUpdateInfo {Id = fileId, NewAccess = access});
             
             return RedirectToAction("Detail", new []{fileId, page});
         }

@@ -16,5 +16,8 @@ namespace FileArchive.Models.File.Implementations
             _spaces[status.Status] = status;
             return this;
         }
+
+        public ISpaceProvider AddStatus (string name, byte status, long bytesCount) =>
+            AddStatus(new(name, status, bytesCount));
     }
 }

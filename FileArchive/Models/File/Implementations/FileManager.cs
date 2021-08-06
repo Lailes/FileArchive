@@ -44,23 +44,28 @@ namespace FileArchive.Models.File.Implementations
         public async Task DeleteArchiveFileByIdAsync (int fileId)
         {
             var file = _fileDetailProvider.GetFileDetailById(fileId);
-
-            await _fileSystemProvider.DeleteFileEntity(file.Path);
-            await _fileDetailProvider.DeleteFileDetail(file.Id);
+            
+            var t1 = _fileSystemProvider.DeleteFileEntity(file.Path);
+            var t2 = _fileDetailProvider.DeleteFileDetail(file.Id);
+            await Task.WhenAll(t1, t2);
         }
 
         public async Task UpdateArchiveFileAsync (FileUpdateInfo info)
         {
             var detail = _fileDetailProvider.GetFileDetailById(info.Id);
-            
+
+            var tasks = new List<Task>();
+
             if (info.NewName != null)
-                await _fileDetailProvider.UpdateFileDetail(await _fileSystemProvider.UpdateFileName(detail.Path, info.NewName));
+                tasks.Add(_fileDetailProvider.UpdateFileDetail(await _fileSystemProvider.UpdateFileName(detail.Path, info.NewName)));
             
             if (info.NewData != null)
-                await _fileDetailProvider.UpdateFileDetail(await _fileSystemProvider.UpdateFileData(detail.Path, info.NewData));
+                tasks.Add(_fileDetailProvider.UpdateFileDetail(await _fileSystemProvider.UpdateFileData(detail.Path, info.NewData)));
 
             if (detail.AllowAnonymus != info.NewAccess)
-                await _fileDetailProvider.UpdateFileDetail(new FileDetail {Id = detail.Id, AllowAnonymus = info.NewAccess});
+                tasks.Add(_fileDetailProvider.UpdateFileDetail(new FileDetail {Id = detail.Id, AllowAnonymus = info.NewAccess}));
+
+            await Task.WhenAll(tasks);
         }
 
         public bool VerifyOwner (int fileId, string userName) =>

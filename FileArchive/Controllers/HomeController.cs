@@ -6,6 +6,5 @@ namespace FileArchive.Controllers
     {
         [HttpGet]
         public IActionResult Index () => User.Identity.IsAuthenticated ? Redirect("/Profile") : View();
-                             
     }
 }

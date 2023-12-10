@@ -35,7 +35,7 @@
             </div>
             <div style="text-align:center">
             
-                @if (Model.FileDetail.AllowAnonymus == false)
+                @if (Model.FileDetail.AllowAnonymusId == null)
                 {
                     <div>
                         <a class="btn btn-secondary" 
@@ -53,7 +53,7 @@
                                 <a id="link" 
                                    asp-controller="File" 
                                    asp-action="DownloadAnonymus" 
-                                   asp-route-fileId="@Model.FileDetail.Id"
+                                   asp-route-fileId="@Model.FileDetail.AllowAnonymusId"
                                    class="btn btn-light"
                                    style="margin-right: 10px; border-color: #0a8b00"></a>
                                 <button value="Copy" class="btn btn-secondary" onclick="pasteToClipboard()">Copy</button>

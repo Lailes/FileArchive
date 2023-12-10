@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace FileArchive.Models.File.FileModels
@@ -6,7 +7,7 @@ namespace FileArchive.Models.File.FileModels
     {
         public int Id { get; set; }
         public string NewName { get; set; }
-        public bool NewAccess { get; set; }
+        public Guid? NewAccess { get; set; }
         public Stream NewData { get; set; }
     }
 }

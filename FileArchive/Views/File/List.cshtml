@@ -4,57 +4,44 @@
     Layout = "_Layout";
 }
 
-@if (Model != null)
-{
-    <div class="shadow centered" style="border-radius: 5px;background: #e8eeff; width: 50%">
-        <div class="shadow title-div">
-            <div style="float: left">
-                <text style="color: #ffffff;">Total Files: @Model.TotalItems</text>
-            </div>
-            <div style="float: right">
-                <form asp-controller="File" asp-action="UploadFile" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file">
-                    <input type="submit" value="Upload File" class="btn btn-primary shadow" style="background-color: #3a2c5a;">
-                </form>
-            </div>
+<div class="shadow centered" style="border-radius: 5px;background: #e8eeff; width: 50%">
+    <div class="shadow title-div">
+        <div style="float: left">
+            <text style="color: #ffffff;">Total Files: @Model.TotalItems</text>
         </div>
-        <div>
-            @if (Model.FileDetails.Any())
-            {
-                @foreach (var detail in Model.FileDetails)
-                {
-                    <div class="file-list-item shadow">
-                        <div style="margin-right: 30px; display: inline-block; vertical-align: middle">
-                            <div>
-                                <a asp-controller="File" 
-                                   asp-action="Detail" 
-                                   asp-route-fileId=@detail.Id 
-                                   asp-route-backPage="@Model.PageNumber">@detail.FileName</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="centered shadow" style="margin: 30px; border-radius: 10px; padding: 30px">
-                    No files
-                </div>
-            }
-        </div>
-        <div class="shadow pagination-div"
-             page-model="@Model"
-             selected-button-class="btn btn-secondary pagination-btn shadow"
-             unselected-button-class="btn btn-light pagination-btn shadow"
-             controller="Files"
-             button-start-class="btn btn-primary pagination-btn shadow"
-             button-end-class="btn btn-primary pagination-btn shadow"
-             div-class="shadow pagination-div view-div"
-             action="List">
+        <div style="float: right">
+            <form asp-controller="File" asp-action="UploadFile" method="post" enctype="multipart/form-data">
+                <input type="file" name="file">
+                <input type="submit" value="Upload File" class="btn btn-primary shadow" style="background-color: #3a2c5a;">
+            </form>
         </div>
     </div>
-}
-else
-{
-    <div class="shadow centered">No files</div>
-}
+    <div>
+        @if (Model.FileDetails.Any())
+        {
+            @foreach (var detail in Model.FileDetails)
+            {
+                <div class="file-list-item shadow">
+                    <div style="margin-right: 30px; display: inline-block; vertical-align: middle">
+                        <div>
+                            <a asp-controller="File" 
+                               asp-action="Detail" 
+                               asp-route-fileId=@detail.Id 
+                               asp-route-backPage="@Model.PageNumber">@detail.FileName</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <div class="shadow pagination-div"
+         page-model="@Model"
+         selected-button-class="btn btn-secondary pagination-btn shadow"
+         unselected-button-class="btn btn-light pagination-btn shadow"
+         controller="Files"
+         button-start-class="btn btn-primary pagination-btn shadow"
+         button-end-class="btn btn-primary pagination-btn shadow"
+         div-class="shadow pagination-div view-div"
+         action="List">
+    </div>
+</div>

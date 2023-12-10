@@ -33,6 +33,15 @@ namespace FileArchive.Infrastructure.TagHelpers
             var builder = new TagBuilder("div");
             var buttonTagBuilder = new TagBuilder("div");
 
+            if (PageModel.TotalItems == 0)
+            {
+                buttonTagBuilder.Attributes["style"] = "text-align:center;";
+                buttonTagBuilder.InnerHtml.AppendHtml("No Files");
+                builder.InnerHtml.AppendHtml(buttonTagBuilder);
+                output.Content.AppendHtml(builder.InnerHtml);
+                return;
+            }
+
             var page = PageModel.PageNumber;
             var pageCount = Math.Ceiling((double) PageModel.TotalItems / PageModel.ItemsPerPage);
             if (pageCount < 5)

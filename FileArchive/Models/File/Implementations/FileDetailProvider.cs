@@ -32,8 +32,13 @@ namespace FileArchive.Models.File.Implementations
             _applicationContext.FileDetails
                                .FirstOrDefault(detail => detail.Id == fileId) 
                                                          ?? throw new FileDetailNotfoundException();
-        
-        
+
+        public FileDetail GetFileDetailByGuid(Guid guid) =>
+            _applicationContext.FileDetails
+                               .FirstOrDefault(_ => _.AllowAnonymusId != null && _.AllowAnonymusId == guid)
+            ?? throw new FileDetailNotfoundException();
+
+
         public async Task DeleteFileDetail (int fileId)
         {
             var detail = GetFileDetailById(fileId);
@@ -57,8 +62,8 @@ namespace FileArchive.Models.File.Implementations
             if (fileDetail.FileName != null)
                 detail.FileName = fileDetail.FileName;
             
-            if (fileDetail.AllowAnonymus != null)
-                detail.AllowAnonymus = fileDetail.AllowAnonymus;
+            if (fileDetail.AllowAnonymusId != null)
+                detail.AllowAnonymusId = fileDetail.AllowAnonymusId;
 
             _applicationContext.Entry(detail).State = EntityState.Modified;
             

@@ -22,7 +22,7 @@ namespace FileArchive.Controllers
     [Route("Files")]
     public class FileController : Controller
     {
-        private readonly IFileManager _fileManager;
+        private readonly IFileManager _fileManager;   
         private readonly ISpaceProvider _spaceProvider;
         private readonly IUserLevelProvider _userLevelProvider;
 
@@ -70,12 +70,12 @@ namespace FileArchive.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("Shared/{fileId:int}")]
-        public async Task<IActionResult> DownloadAnonymus (int fileId)
+        [Route("Shared/{fileId:guid}")]
+        public async Task<IActionResult> DownloadAnonymus (Guid fileId)
         {
-            await using var file = _fileManager.GetArchiveFileById(fileId);
+            await using var file = _fileManager.GetArchiveFileByGuid(fileId);
                 
-            if (file.Details.AllowAnonymus == false)
+            if (file is null)
                 return NotFound();
             
             return File(await file.Stream.ReadArrayAsync(), "application/xxx", file.Details.FileName);
@@ -138,7 +138,7 @@ namespace FileArchive.Controllers
             if (!_fileManager.VerifyOwner(fileId, User.Identity.Name))
                 return NotFound();
                 
-            await _fileManager.UpdateArchiveFileAsync(new FileUpdateInfo {Id = fileId, NewAccess = access});
+            await _fileManager.UpdateArchiveFileAsync(new FileUpdateInfo {Id = fileId, NewAccess = access ? Guid.NewGuid() : null });
             
             return RedirectToAction("Detail", new []{fileId, page});
         }

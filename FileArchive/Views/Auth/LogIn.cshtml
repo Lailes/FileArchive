@@ -14,6 +14,15 @@
         <label class="form-label">Password:</label>
         <input type="password" class="form-control" asp-for="Password">
     </div>
+    @if (!ViewContext.ModelState.IsValid)
+    {
+        <div class="mb-3">
+            @foreach (var error in ViewContext.ModelState.Values.SelectMany(value => value.Errors))
+            {
+                <label class="form-label"> @error.ErrorMessage</label>
+            }
+        </div>
+    }
     <button type="submit" class="btn btn-primary">Log In</button>
     <a class="btn btn-secondary go-right" asp-controller="Home" asp-action="Index">Go back</a>
 </form>

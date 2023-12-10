@@ -13,6 +13,6 @@ namespace FileArchive.Models.File.FileModels
         public string Path { get; set; }
         public string OwnerEmail { get; set; }
 
-        public bool? AllowAnonymus { get; set; } = false;
+        public Guid? AllowAnonymusId { get; set; }
     }
 }

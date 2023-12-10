@@ -10,8 +10,9 @@ namespace FileArchive.Models.Account
     {
         public IdentityContext (DbContextOptions<IdentityContext> options) : base(options)
         {
+            Database.EnsureCreated();
         }
-
+        
         public byte GetStatus (string userEmail) =>
             Users.AsEnumerable().FirstOrDefault(user => user.UserName == userEmail)?.Status
             ?? throw new UserNotFoundException("Not found: " + userEmail);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,6 +42,19 @@ namespace FileArchive.Models.File.Implementations
             return file;
         }
 
+        public ArchiveFile GetArchiveFileByGuid(Guid guid)
+        {
+            var fileDetail = _fileDetailProvider.GetFileDetailByGuid(guid);
+
+            if (fileDetail == null)
+                throw new FileDetailNotfoundException();
+            
+            var file = _fileSystemProvider.GetFileEntity(fileDetail.Path);
+            file.Details = fileDetail;
+            
+            return file;
+        }
+
         public async Task DeleteArchiveFileByIdAsync (int fileId)
         {
             var file = _fileDetailProvider.GetFileDetailById(fileId);
@@ -62,8 +76,8 @@ namespace FileArchive.Models.File.Implementations
             if (info.NewData != null)
                 tasks.Add(_fileDetailProvider.UpdateFileDetail(await _fileSystemProvider.UpdateFileData(detail.Path, info.NewData)));
 
-            if (detail.AllowAnonymus != info.NewAccess)
-                tasks.Add(_fileDetailProvider.UpdateFileDetail(new FileDetail {Id = detail.Id, AllowAnonymus = info.NewAccess}));
+            if (detail.AllowAnonymusId != info.NewAccess)
+                tasks.Add(_fileDetailProvider.UpdateFileDetail(new FileDetail {Id = detail.Id, AllowAnonymusId = info.NewAccess}));
 
             await Task.WhenAll(tasks);
         }

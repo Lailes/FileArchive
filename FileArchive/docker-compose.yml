@@ -1,0 +1,55 @@
+﻿services:
+  filearchive:
+    depends_on: [ database-app, database-auth ]
+    image: filearchive
+    environment:
+      ROOT_PATH: ${FILE_PATH}
+      APP_DB: ${APP_DB}
+      APP_DB_HOST: database-app
+      APP_DB_PORT: ${APP_DB_PORT}
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_USER_PASSWORD: ${APP_DB_USER_PASSWORD}
+      AUTH_DB: ${AUTH_DB}
+      AUTH_DB_HOST: database-auth
+      AUTH_DB_PORT: ${AUTH_DB_PORT}
+      AUTH_DB_USER: ${AUTH_DB_USER}
+      AUTH_DB_USER_PASSWORD: ${AUTH_DB_USER_PASSWORD}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${APP_PORT_EXTERNAL}:${APP_PORT_INTERNAL}"  
+    networks:
+      - app-network
+
+  database-app:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${APP_DB} 
+      POSTGRES_USER: ${APP_DB_USER}
+      POSTGRES_PASSWORD: ${APP_DB_USER_PASSWORD} 
+    ports:
+      - "${APP_DB_PORT}:${APP_DB_PORT}"
+    expose:
+      - ${APP_DB_PORT}
+    command: -p ${APP_DB_PORT}
+    networks:
+      - app-network
+  
+  database-auth:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${AUTH_DB}
+      POSTGRES_USER: ${AUTH_DB_USER} 
+      POSTGRES_PASSWORD: ${AUTH_DB_USER_PASSWORD}
+    ports:
+      - "${AUTH_DB_PORT}:${AUTH_DB_PORT}"
+    expose:
+      - ${AUTH_DB_PORT}
+    command: -p ${AUTH_DB_PORT}
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

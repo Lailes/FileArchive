@@ -11,10 +11,7 @@ namespace FileArchive.Models.File.Implementations
     {
         private readonly FileSystemProviderOptions _options;
 
-        public FileSystemProvider (FileSystemProviderOptions options)
-        {
-            _options = options;
-        }
+        public FileSystemProvider (FileSystemProviderOptions options) => _options = options;
 
         public async Task<FileDetail> SaveFileAsync (ArchiveFile archiveFile)
         {
@@ -33,7 +30,7 @@ namespace FileArchive.Models.File.Implementations
                 FileName = archiveFile.Name,
                 OwnerEmail = archiveFile.OwnerEmail,
                 Path = path,
-                UploadDateTime = DateTime.Now
+                UploadDateTime = DateTime.UtcNow
             };
         }
 
@@ -95,5 +92,5 @@ namespace FileArchive.Models.File.Implementations
         }
     }
 
-    public record FileSystemProviderOptions (string Root);
+    public record FileSystemProviderOptions(string Root);
 }

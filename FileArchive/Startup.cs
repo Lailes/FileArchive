@@ -11,66 +11,75 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace FileArchive
+namespace FileArchive;
+
+public class Startup
 {
-    public class Startup
+    private readonly IConfiguration _configuration;
+
+    public Startup(IConfiguration configuration) => _configuration = configuration;
+
+    public void ConfigureServices (IServiceCollection services)
     {
-        private const string IdentityConfig = "Identity:ConnectionString";
-        private const string MsSqlConfig    = "MsSqlConfig:ConnectionString";
-        private const string RootPath       = "Storage:RootPath";
-
-        private readonly IConfiguration _configuration;
-
-        public Startup (IConfiguration configuration)
+        services.AddMvc(options => options.EnableEndpointRouting = false);
+        
+        services.AddDbContext<IdentityContext>(opt =>
         {
-            _configuration = configuration;
-        }
-
-        public void ConfigureServices (IServiceCollection services)
-        {
-            services.AddMvc(options => options.EnableEndpointRouting = false);
-
-            services.AddDbContext<IdentityContext>(opt => opt.UseSqlServer(_configuration[IdentityConfig]));
-            services.AddIdentity<FileArchiveUser, IdentityRole>()
-                    .AddEntityFrameworkStores<IdentityContext>()
-                    .AddDefaultTokenProviders();
-
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(_configuration[MsSqlConfig]));
-
-            services.AddSingleton(_ => new SpaceProvider()
-                                      .AddStatus("Default", 0, 5352980480)
-                                      .AddStatus("Privileged", 1, 53529804800));
+            var db = _configuration["AUTH_DB"];
+            var host = _configuration["AUTH_DB_HOST"];
+            var port = _configuration["AUTH_DB_PORT"];
+            var user = _configuration["AUTH_DB_USER"];
+            var password = _configuration["AUTH_DB_USER_PASSWORD"];
+            var connectionString = $"Host={host};Port={port};Database={db};Username={user};Password={password}";
             
-            services.AddScoped<IFileDetailProvider, FileDetailProvider>();
-            services.AddScoped<IFileSystemProvider, FileSystemProvider>(_ => new FileSystemProvider(new FileSystemProviderOptions (_configuration[RootPath])));
-            services.AddScoped<IFileManager, FileManager>();
-            services.AddScoped<IUserLevelProvider, IdentityContext>();
+            opt.UseNpgsql(connectionString);
+        });
 
-            services.AddMemoryCache();
-            services.AddSession();
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure (IApplicationBuilder app, IWebHostEnvironment env)
+        services.AddDbContext<ApplicationContext>(options =>
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseStatusCodePages();
-                SeedUser.EnsurePopulate(app);
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-            }
+            var db = _configuration["APP_DB"];
+            var host = _configuration["APP_DB_HOST"];
+            var port = _configuration["APP_DB_PORT"];
+            var user = _configuration["APP_DB_USER"];
+            var password = _configuration["APP_DB_USER_PASSWORD"];
+            options.UseNpgsql($"Host={host};Port={port};Database={db};Username={user};Password={password}");
+        });
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+        services.AddIdentity<FileArchiveUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddDefaultTokenProviders();
+            
+        services.AddSingleton(_ => new SpaceProvider()
+                                   .AddStatus("Default", 0, 5352980480)
+                                   .AddStatus("Privileged", 1, 53529804800));
+            
+        services.AddSingleton(_ => new FileSystemProviderOptions(_configuration["FILE_PATH"]));
+        services.AddScoped<IFileDetailProvider, FileDetailProvider>();
+        services.AddScoped<IFileSystemProvider, FileSystemProvider>();
+        services.AddScoped<IFileManager, FileManager>();
+        services.AddScoped<IUserLevelProvider, IdentityContext>();
 
-            app.UseStaticFiles();
-            app.UseSession();
+        services.AddMemoryCache();
+        services.AddSession();
+    }
 
-            app.UseMvc(options => { options.MapRoute("default", "{controller=Home}/{action=Index}"); });
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure (IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseStatusCodePages();
+            SeedUser.EnsurePopulate(app);
         }
+        else app.UseExceptionHandler("/Error");
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseStaticFiles();
+        app.UseSession();
+
+        app.UseMvc(options => options.MapRoute("default", "{controller=Home}/{action=Index}"));
     }
 }

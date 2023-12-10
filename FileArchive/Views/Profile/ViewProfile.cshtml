@@ -4,7 +4,7 @@
 
 <div class="centered shadow" style="border-radius: 5px">
     <div class="shadow title-div">
-        <text style="color: #ffffff">Welcome, @Model.UserName</text>
+        <text style="color: #ffffff">Welcome, @Model.EMail</text>
     </div>
     <div class="sample-div">
          <div class="shadow profile-info-div">
@@ -14,7 +14,7 @@
              User level: @(Model.UserLevel)
          </div>
          <div class="shadow profile-info-div">
-             Used space: @(Model.UsedBytes / 1024) Kb
+             Used space: @(Model.UsedBytes / 1024) Kb of @(Model.TotalBytes / 1024) Kb
          </div>
     </div>
 </div>
